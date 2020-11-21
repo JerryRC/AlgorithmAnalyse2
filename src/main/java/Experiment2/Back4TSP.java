@@ -8,16 +8,20 @@ public class Back4TSP {
 	int bigInt = Integer.MAX_VALUE;
 	int[][] a; // 邻接矩阵
 	int cc = 0; // 存储当前代价
-	int bestc = bigInt;// 当前最优代价
+	int bestC = bigInt;// 当前最优代价
 	int[] x; // 当前解
-	int[] bestx;// 当前最优解
+	int[] bestX;// 当前最优解
 	int n = 0; // 顶点个数
+
+	public int getBestC(){
+		return bestC;
+	}
 
 	private void backtrack(int i) {//i为初始深度
 		if (i > n) {
 			//TODO
-			bestc = cc + a[x[i - 1]][1];
-			bestx = x.clone();
+			bestC = cc + a[x[i - 1]][1];
+			bestX = x.clone();
 		} else {
 			//TODO
 			for (int j = i; j <= n; ++j) {
@@ -44,14 +48,14 @@ public class Back4TSP {
 		//TODO
 		if (pos < n
 				&& a[x[pos - 1]][x[pos]] != NoEdge
-				&& cc + a[x[pos - 1]][x[pos]] < bestc) {
+				&& cc + a[x[pos - 1]][x[pos]] < bestC) {
 
 			cc += a[x[pos - 1]][x[pos]];
 			return true;
 		} else if (pos == n
 				&& a[x[pos - 1]][x[pos]] != NoEdge
 				&& a[x[pos]][1] != NoEdge
-				&& cc + a[x[pos - 1]][x[pos]] + a[x[pos]][1] < bestc) {
+				&& cc + a[x[pos - 1]][x[pos]] + a[x[pos]][1] < bestC) {
 
 			cc = cc + a[x[pos - 1]][x[pos]];
 			return true;
@@ -64,10 +68,10 @@ public class Back4TSP {
 		x = new int[n + 1];
 		for (int i = 0; i <= n; i++)
 			x[i] = i;
-		bestx = new int[n + 1];
+		bestX = new int[n + 1];
 		a = b;
 		backtrack(2);
-		System.out.println("best   solution: " + Arrays.toString(bestx));
+		System.out.println("The best path: " + Arrays.toString(bestX));
 
 	}
 

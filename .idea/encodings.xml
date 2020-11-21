@@ -5,5 +5,6 @@
     <file url="file://$PROJECT_DIR$/src/main/java/Experiment2/Back4TSP.java" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/main/java/Experiment3/GAOperations.java" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/main/test/Experiment3/GATest.java" charset="GB2312" />
+    <file url="file://$PROJECT_DIR$/src/main/test/Experiment3/compareTest.java" charset="GBK" />
   </component>
 </project>

@@ -6,8 +6,8 @@ import java.util.Vector;
 
 public class GAOperations {
 
-    private final static double Pc = 0.4;        //交叉概率
-    private final static double Pm = 0.04;        //变异概率
+    private final static double Pc = 0.5;        //交叉概率
+    private final static double Pm = 0.05;        //变异概率
     private static int min = 0;    //最短路径
     private static int[] result = null;
 
@@ -79,13 +79,11 @@ public class GAOperations {
     public static void roundBet(int popNum, int length, int[][] iniPop, double[] fitness, int[] codes) {
         //轮盘赌
         //TODO
-        //这里备份一个fitness，用于交配时的判断
-        double[] cloneFit = fitness.clone();
         //这里不考虑sum超出阈值的情况
         double sum = 0;
         double maxFitness = fitness[0];
         int maxPos = 0;
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < popNum; i++) {
             sum += fitness[i];
             if (maxFitness < fitness[i]) {
                 maxFitness = fitness[i];
@@ -98,8 +96,8 @@ public class GAOperations {
         //保留最优种子
         Vector<int[]> resultPop = new Vector<>();
         resultPop.add(iniPop[maxPos].clone());
-        sum -= fitness[maxPos];
-        fitness[maxPos] = 0;
+//        sum -= fitness[maxPos];
+//        fitness[maxPos] = 0;
 
         //转动轮盘,选择十分之一的个体放到tmpPop,直接遗传到下一轮
         for (int i = 0; i < popNum / 10; ++i) {
@@ -112,8 +110,8 @@ public class GAOperations {
                 count += fit / sum;
                 if (choose <= count) {
                     //选中
-                    sum -= fitness[pos];
-                    fitness[pos] = 0;
+//                    sum -= fitness[pos];
+//                    fitness[pos] = 0;
                     break;
                 }
                 pos++;
@@ -255,28 +253,15 @@ public class GAOperations {
         return -1;
     }
 
-
-    public static void main(String[] args) {
-        int popNum = 10;
-        int length = 5;
-        int codeNum = 5;
-        int[] codes = {1, 2, 3, 4, 5};
-        int[] codeCount = {1, 1, 1, 1, 1};
-        int[][] a = {
-                {100, 3, 1, 5, 8},
-                {3, 100, 6, 7, 9},
-                {1, 6, 100, 4, 2},
-                {5, 7, 4, 100, 3},
-                {8, 9, 2, 3, 100}
-        };
+    public static void run(int popNum, int length, int codeNum, int[] codes, int[][] a) {
         int[][] iniPop = new int[popNum][length];    //10 population, individual's length is 5
         GAOperations gaOperations = new GAOperations();
 
-        gaOperations.RandomInitialization(popNum, length, codes, codeNum, codeCount, iniPop);
+        gaOperations.RandomInitialization(popNum, length, codes, codeNum, null, iniPop);
 
         //遗传一千代
-        int T = 1000;
-        while(T-- != 0){
+        int T = 20000;
+        while (T-- != 0) {
             int i;
             double[] fitness = new double[popNum];
             for (i = 0; i < popNum; i++) {
@@ -286,13 +271,28 @@ public class GAOperations {
             GAOperations.roundBet(popNum, length, iniPop, fitness, codes);
         }
 
-        for(int i=0;i<result.length-1;++i){
-            min += a[result[i]-1][result[i+1]-1];
+        for (int i = 0; i < result.length - 1; ++i) {
+            min += a[result[i] - 1][result[i + 1] - 1];
         }
-        min += a[result[result.length-1]-1][0];
+        min += a[result[result.length - 1] - 1][0];
 
-        System.out.println(min);
-        System.out.println(Arrays.toString(result));
+        System.out.println("The best path: " + Arrays.toString(result));
+        System.out.println("Cost: " + min);
+    }
 
+
+    public static void main(String[] args) {
+        int popNum = 10;
+        int length = 5;
+        int codeNum = 5;
+        int[] codes = {1, 2, 3, 4, 5};
+        int[][] a = {
+                {100, 3, 1, 5, 8},
+                {3, 100, 6, 7, 9},
+                {1, 6, 100, 4, 2},
+                {5, 7, 4, 100, 3},
+                {8, 9, 2, 3, 100}
+        };
+        GAOperations.run(popNum, length, codeNum, codes, a);
     }
 }
